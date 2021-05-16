@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quark.common.dao.UserDao">
+    <select id="findByUsername" resultType="user">
+        select * from quark_user where username = #{username}
+    </select>
+    <select id="findByEmail" resultType="user">
+        select * from quark_user where email = #{email}
+    </select>
+    <select id="findNewUser" resultType="user">
+        select u.id, u.username , u.icon from quark_user u where DATE_SUB(CURDATE(), INTERVAL 30 DAY) <= DATE(u.init_time) ORDER BY u.id DESC limit 12
+    </select>
+    <select id="findByPage" resultType="user">
+    select  * from quark_user
+    <where>
+        username like concat('%',#{user.username},'%')
+        and email like concat('%',#{user.email},'%')
+        and signature like concat('%',#{user.signature},'%')
+    </where>
+    </select>
+</mapper>

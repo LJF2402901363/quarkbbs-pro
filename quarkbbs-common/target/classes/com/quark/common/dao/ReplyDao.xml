@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quark.common.dao.ReplyDao">
+
+    <select id="findAll" resultType="reply">
+        select * from quark_reply
+    </select>
+    <select id="findByPage" resultType="reply">
+        select * from  quark_reply
+        <where>
+             id = #{reply.id}
+            and content like concat('%',#{reply.content},'%')
+        </where>
+    </select>
+</mapper>
