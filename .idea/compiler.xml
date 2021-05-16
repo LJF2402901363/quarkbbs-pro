@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="quarkbbs-portal" />
+        <module name="quarkbbs-rest" />
+        <module name="quarkbbs-admin" />
+        <module name="quarkbbs-common" />
+        <module name="quark-chat" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="quarkbbs" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="quark-chat" options="-parameters" />
+      <module name="quarkbbs-admin" options="-parameters" />
+      <module name="quarkbbs-common" options="-parameters" />
+      <module name="quarkbbs-portal" options="-parameters" />
+      <module name="quarkbbs-rest" options="-parameters" />
+    </option>
+  </component>
+</project>
