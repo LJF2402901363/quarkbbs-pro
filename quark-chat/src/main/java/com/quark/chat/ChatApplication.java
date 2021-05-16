@@ -21,7 +21,7 @@ import java.util.Properties;
  * @Email : 13435500980@163.com
  */
 @SpringBootApplication
-@EnableCaching//缓存支持
+@EnableCaching//缓存支持开启
 public class ChatApplication  implements CommandLineRunner {
     @Autowired
     private QuarkChatServer server;
