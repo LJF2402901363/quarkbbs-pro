@@ -1,5 +1,18 @@
-#Mysql閰嶇疆
+server:
+  port: 8082
 spring:
+  redis:
+    host: 121.4.41.89
+    jedis:
+      pool:
+        max-active: 8
+        min-idle: 1
+        max-idle: 8
+    port: 6379
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
@@ -21,10 +34,10 @@ spring:
         wall:
           config:
             multi-statement-allow: true
-#閰嶇疆mybatisplus
+#配置mybatisplus
 mybatis-plus:
   configuration:
-    #鍏抽棴鏌ヨ鏃堕粯璁や笅鍒掔嚎鏄犲皠
+    #关闭查询时默认下划线映射
     map-underscore-to-camel-case: false
     auto-mapping-behavior: full
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
@@ -35,7 +48,3 @@ mybatis-plus:
       logic-delete-field: isDeleted
       logic-delete-value: 1
       logic-not-delete-value: 0
-
-
-
-
