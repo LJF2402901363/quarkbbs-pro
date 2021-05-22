@@ -2,6 +2,7 @@ package com.quark.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.quark.common.utils.Constants;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("quark_posts")
 public class Posts implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;

@@ -1,7 +1,9 @@
 package com.quark.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +20,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("quark_permission")
 public class Permission implements Serializable{
 
     @TableId(type = IdType.AUTO)
@@ -37,8 +40,10 @@ public class Permission implements Serializable{
     private Integer sort;
 
     //是否选中
+    @TableField(exist = false)
     private String checked;
 
     @JsonIgnore
+    @TableField(exist = false)
     private Set<Role> roles = new HashSet<>();
 }

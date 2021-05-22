@@ -12,7 +12,6 @@ import java.util.List;
  * @Author LHR
  * Create By 2017/9/6
  */
-@Repository
 public interface NotificationDao extends BaseMapper<Notification> {
 
     long getNotificationCount(@Param("id") Integer id);

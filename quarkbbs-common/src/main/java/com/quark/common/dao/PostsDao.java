@@ -14,17 +14,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @CacheConfig(cacheNames = "postses")
-@Repository
 public interface PostsDao extends BaseMapper<Posts> {
 
     @Cacheable
     List<Posts> findAll();
 
-    List<Posts> findHot();
+    List<Posts> findHot(@Param("startTime")String startTime,@Param("endTime")String endTime);
 
-    IPage<Posts> findByUser(User user);
+    IPage<Posts> findByUser(@Param("user") User user);
 
-    IPage<Posts> findByLabel(Label label);
+    IPage<Posts> findByLabel(@Param("label") Label label);
 
     Page<Posts> findByPage(@Param("page") Page<Posts> page, @Param("posts") Posts posts);
 

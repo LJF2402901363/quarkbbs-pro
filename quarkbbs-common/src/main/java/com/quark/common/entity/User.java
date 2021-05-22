@@ -2,6 +2,7 @@ package com.quark.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quark.common.utils.Constants;
@@ -21,6 +22,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("quark_user")
 public class User implements Serializable {
 
     @TableId(type = IdType.AUTO)

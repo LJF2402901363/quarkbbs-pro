@@ -15,7 +15,6 @@ import java.util.List;
  * Create By 2017/8/20
  */
 @CacheConfig(cacheNames = "replies")
-@Repository
 public interface ReplyDao extends BaseMapper<Reply> {
 
     @Cacheable

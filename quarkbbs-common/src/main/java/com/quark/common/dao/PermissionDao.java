@@ -11,7 +11,6 @@ import java.util.List;
 /**
  * Created by lhr on 17-7-31.
  */
-@Repository
 @CacheConfig(cacheNames = "permissions")
 public interface PermissionDao extends BaseMapper<Permission> {
 

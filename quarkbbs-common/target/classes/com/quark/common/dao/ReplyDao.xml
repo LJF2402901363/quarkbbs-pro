@@ -11,7 +11,16 @@
         select * from  quark_reply
         <where>
              id = #{reply.id}
-            and content like concat('%',#{reply.content},'%')
+             <if test="reply.content != null">
+                 and content like concat('%',#{reply.content},'%')
+             </if>
+
+        </where>
+    </select>
+    <select id="findByPageById" resultType="reply">
+        select * from  quark_reply
+        <where>
+            id = #{id}
         </where>
     </select>
 </mapper>

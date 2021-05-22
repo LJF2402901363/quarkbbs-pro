@@ -35,14 +35,14 @@ public class AdminApplication {
         });
     }
 
-    public static void main(String[] args) throws IOException {
-        //更改properties配置文件名称,避免依赖冲突
-        Properties properties = new Properties();
-        InputStream in = AdminApplication.class.getClassLoader().getResourceAsStream("admin.properties");
-        properties.load(in);
-        SpringApplication app = new SpringApplication(AdminApplication.class);
-        app.setDefaultProperties(properties);
-        app.run(args);
-//        SpringApplication.run(CommonApplication.class, args);
+    public static void main(String[] args)  {
+//        //更改properties配置文件名称,避免依赖冲突
+//        Properties properties = new Properties();
+//        InputStream in = AdminApplication.class.getClassLoader().getResourceAsStream("admin.properties");
+//        properties.load(in);
+//        SpringApplication app = new SpringApplication(AdminApplication.class);
+//        app.setDefaultProperties(properties);
+//        app.run(args);
+        SpringApplication.run(AdminApplication.class, args);
     }
 }

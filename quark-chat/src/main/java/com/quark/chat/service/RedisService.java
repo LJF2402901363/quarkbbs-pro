@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisService<T> {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,T> redisTemplate;
 
     /**
      * 设置String缓存

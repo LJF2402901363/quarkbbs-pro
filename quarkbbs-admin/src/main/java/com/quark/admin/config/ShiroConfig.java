@@ -6,6 +6,7 @@ import com.quark.admin.shiro.MyShiroRealm;
 import com.quark.common.entity.Permission;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.mgt.SessionsSecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import redis.clients.jedis.JedisPool;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -95,7 +97,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/font-awesome/**", "anon");
 
         //自定义加载权限资源关系
-        List<Permission> list = permissionService.findAll();
+        List<Permission> list = permissionService.list();
         for (Permission p : list) {
             if (!p.getPerurl().isEmpty()) {
                 String permission = "perms[" + p.getPerurl() + "]";
@@ -105,6 +107,7 @@ public class ShiroConfig {
 
 
         //过滤链定义，从上向下顺序执行，一般将 /**放在最为下边
+
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
@@ -112,14 +115,15 @@ public class ShiroConfig {
 
 
     @Bean
-    public SecurityManager securityManager() {
+    public SecurityManager securityManager(DefaultWebSessionManager sessionsSecurityManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //设置realm.
         securityManager.setRealm(getMyShiroRealm());
         // 自定义缓存实现 使用redis
         //securityManager.setCacheManager(cacheManager());
         // 自定义session管理 使用redis
-        securityManager.setSessionManager(sessionManager());
+        securityManager.setSessionManager(sessionsSecurityManager);
+
         return securityManager;
     }
 
@@ -130,7 +134,6 @@ public class ShiroConfig {
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher(){
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-
         hashedCredentialsMatcher.setHashAlgorithmName("md5");
         hashedCredentialsMatcher.setHashIterations(2);//散列的次数，相当于 md5(md5(""));
         return hashedCredentialsMatcher;
@@ -153,13 +156,13 @@ public class ShiroConfig {
      * 使用的是shiro-redis开源插件
      * @return
      */
-    public RedisManager redisManager() {
+    @Bean
+    public RedisManager redisManager(JedisPool jedisPool) {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(host);
-        redisManager.setPort(port);
-//        redisManager.setPassword(password);
-        redisManager.setExpire(1800);// 配置缓存过期时间
+        redisManager.setPassword(password);
         redisManager.setTimeout(timeout);
+        redisManager.setJedisPool(jedisPool);
         return redisManager;
     }
 
@@ -168,9 +171,9 @@ public class ShiroConfig {
      * 使用的是shiro-redis开源插件
      * @return
      */
-    public RedisCacheManager cacheManager() {
+    public RedisCacheManager cacheManager(RedisManager redisManager) {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
+        redisCacheManager.setRedisManager(redisManager);
         return redisCacheManager;
     }
 
@@ -178,9 +181,9 @@ public class ShiroConfig {
      * RedisSessionDAO shiro sessionDao层的实现 通过redis
      */
     @Bean
-    public RedisSessionDAO redisSessionDAO() {
+    public RedisSessionDAO redisSessionDAO(RedisManager redisManager) {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-        redisSessionDAO.setRedisManager(redisManager());
+        redisSessionDAO.setRedisManager(redisManager);
         return redisSessionDAO;
     }
 
@@ -188,9 +191,9 @@ public class ShiroConfig {
      * shiro session的管理
      */
     @Bean
-    public DefaultWebSessionManager sessionManager() {
+    public DefaultWebSessionManager sessionManager(RedisSessionDAO redisSessionDAO) {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionDAO(redisSessionDAO());
+        sessionManager.setSessionDAO(redisSessionDAO);
         return sessionManager;
     }
 

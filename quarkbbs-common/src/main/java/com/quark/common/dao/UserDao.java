@@ -18,7 +18,7 @@ public interface UserDao extends BaseMapper<User> {
     User findByEmail(@Param("email") String email);
 
 //    @Query(value = "select u.id, u.username , u.icon from quark_user u where DATE_SUB(CURDATE(), INTERVAL 30 DAY) <=DATE(u.init_time) ORDER BY u.id DESC limit 12" ,nativeQuery = true)
-    List<User> findNewUser();
+    List<User> findNewUser(@Param("startTime")String startTime,@Param("endTime")String endTime);
 
     Page<User> findByPage(@Param("page") Page<User> page, @Param("user") User user);
 }

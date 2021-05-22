@@ -28,14 +28,15 @@ public class ChatApplication  implements CommandLineRunner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public static void main(String[] args) throws IOException {
-        Properties properties = new Properties();
-        InputStream in = ChatApplication.class.getClassLoader().getResourceAsStream("chat.properties");
-        properties.load(in);
-        SpringApplication app = new SpringApplication(ChatApplication.class);
-        app.setDefaultProperties(properties);
-        Thread.yield();
-        app.run(args);
+    public static void main(String[] args){
+//        Properties properties = new Properties();
+//        InputStream in = ChatApplication.class.getClassLoader().getResourceAsStream("chat.properties");
+//        properties.load(in);
+//        SpringApplication app = new SpringApplication(ChatApplication.class);
+//        app.setDefaultProperties(properties);
+//        Thread.yield();
+//        app.run(args);
+        SpringApplication.run(ChatApplication.class, args);
     }
 
     @Bean

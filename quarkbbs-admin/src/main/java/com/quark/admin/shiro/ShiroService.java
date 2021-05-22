@@ -22,8 +22,8 @@ public class ShiroService {
     private ShiroFilterFactoryBean shiroFilterFactoryBean;
     @Autowired
     private PermissionService permissionService;
-    @Autowired
-    private RedisSessionDAO redisSessionDAO;
+//    @Autowired
+//    private RedisSessionDAO redisSessionDAO;
 
 
     /**
@@ -74,8 +74,7 @@ public class ShiroService {
             manager.getFilterChains().clear();
 
             shiroFilterFactoryBean.getFilterChainDefinitionMap().clear();
-            shiroFilterFactoryBean
-                    .setFilterChainDefinitionMap(loadFilterChainDefinitions());
+            shiroFilterFactoryBean.setFilterChainDefinitionMap(loadFilterChainDefinitions());
             // 重新构建生成
             Map<String, String> chains = shiroFilterFactoryBean
                     .getFilterChainDefinitionMap();

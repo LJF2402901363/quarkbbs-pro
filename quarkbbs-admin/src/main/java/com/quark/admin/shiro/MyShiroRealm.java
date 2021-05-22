@@ -38,7 +38,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         List<Permission> permissionList = permissionService.loadUserPermission(id);
         // 权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-
+        //将每一个权限添加到SimpleAuthorizationInfo中
         permissionList.forEach(p->info.addStringPermission(p.getPerurl()));
         return info;
     }
@@ -53,11 +53,13 @@ public class MyShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         //获取用户的输入的账号.
         String username = (String)token.getPrincipal();
+        //通过用户名查找用户
         AdminUser user = adminUserService.findByUserName(username);
         if(user==null) throw new UnknownAccountException();
         if (0==user.getEnable()) {
             throw new LockedAccountException(); // 帐号锁定
         }
+
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user.getId(), //用户
                 user.getPassword(), //密码

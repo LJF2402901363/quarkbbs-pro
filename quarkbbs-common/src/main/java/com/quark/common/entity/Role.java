@@ -1,7 +1,9 @@
 package com.quark.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +21,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("quark_role")
 public class Role implements Serializable{
 
     @TableId(type = IdType.AUTO)
@@ -33,9 +36,11 @@ public class Role implements Serializable{
 
     //角色与用户的关联关系
     @JsonIgnore
-    private Set<AdminUser> adminUsers = new HashSet<>();
+    @TableField(exist = false)
+    private Set<AdminUser> adminUsers ;
 
     //角色与权限的关联关系
     @JsonIgnore
-    private Set<Permission> permissions = new HashSet<>();
+    @TableField(exist = false)
+    private Set<Permission> permissions ;
 }

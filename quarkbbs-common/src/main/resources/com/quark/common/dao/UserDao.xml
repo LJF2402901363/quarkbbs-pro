@@ -10,7 +10,7 @@
         select * from quark_user where email = #{email}
     </select>
     <select id="findNewUser" resultType="user">
-        select u.id, u.username , u.icon from quark_user u where DATE_SUB(CURDATE(), INTERVAL 30 DAY) <= DATE(u.init_time) ORDER BY u.id DESC limit 12
+        select u.id, u.username , u.icon from quark_user u where init_time  between #{startTime}  and #{endTime}  ORDER BY u.id DESC limit 12
     </select>
     <select id="findByPage" resultType="user">
     select  * from quark_user
