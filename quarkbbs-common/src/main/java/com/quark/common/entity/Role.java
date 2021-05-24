@@ -32,6 +32,7 @@ public class Role implements Serializable{
     private String description;
 
     //是否持有角色标志
+    @TableField(exist = false)
     private Integer selected;
 
     //角色与用户的关联关系

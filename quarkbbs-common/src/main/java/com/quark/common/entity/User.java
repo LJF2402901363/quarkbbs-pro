@@ -1,6 +1,7 @@
 package com.quark.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -46,7 +47,7 @@ public class User implements Serializable {
 
     // 注册时间
     @JsonFormat(pattern = Constants.DATE_FORMAT, timezone = "GMT+8")
-    private Date initTime;
+    private Date init_time;
 
     //性别 0 ：男 1：女
     private Integer sex = 0;

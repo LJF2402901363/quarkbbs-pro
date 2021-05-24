@@ -32,5 +32,5 @@ public class Collect implements Serializable{
 
     //收藏时间
     @JsonFormat(pattern = Constants.DATETIME_FORMAT)
-    private Date initTime;
+    private Date init_time;
 }

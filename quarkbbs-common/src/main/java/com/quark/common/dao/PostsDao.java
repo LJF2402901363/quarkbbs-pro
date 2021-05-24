@@ -25,10 +25,14 @@ public interface PostsDao extends BaseMapper<Posts> {
 
     IPage<Posts> findByLabel(@Param("label") Label label);
 
-    Page<Posts> findByPage(@Param("page") Page<Posts> page, @Param("posts") Posts posts);
-
-    Page<Posts> getPostsByPage(@Param("page") Page<Posts> page, @Param("type") String type, @Param("search") String search);
-
+    Page<Posts> findPostsByPage(@Param("page") Page<Posts> page, @Param("posts") Posts posts);
+    /**
+     * @Description :根据id或者posts
+     * @Date 2:23 2021/5/24 0024
+     * @Param * @param postsId ：
+     * @return com.quark.common.entity.Posts
+     **/
+    Posts findPostById(@Param("postsId")Integer postsId);
     Page<Posts> getPostsByUserId(@Param("page") Page<Posts> page, @Param("id") Integer id);
 
     Page<Posts> getPostsByLabel(@Param("page") Page<Posts> page, @Param("label") Label label);

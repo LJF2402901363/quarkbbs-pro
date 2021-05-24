@@ -24,7 +24,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsDao,Posts> implements Pos
     @Override
     public Page<Posts> findByPage(Posts posts, int pageNo, int length) {
         Page<Posts> page = new Page<>(pageNo, length);
-        page =  postsDao.findByPage(page,posts);
+        page =  postsDao.findPostsByPage(page,posts);
         return page;
     }
 

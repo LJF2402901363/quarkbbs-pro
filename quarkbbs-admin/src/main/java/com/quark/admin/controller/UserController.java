@@ -26,8 +26,8 @@ public class UserController extends BaseController {
     public PageResult getAll(User user, String draw,
                              @RequestParam(required = false, defaultValue = "1") int start,
                              @RequestParam(required = false, defaultValue = "10") int length) {
-        int pageNo = start / length;
-        Page<User> page = userService.findByPage(user, pageNo, length);
+        int pageNo = start / length + 1;
+        Page<User> page = userService.findUserByPage(user, pageNo, length);
         PageResult<List<User>> result = new PageResult<>(
                 draw,
                 page.getTotal(),

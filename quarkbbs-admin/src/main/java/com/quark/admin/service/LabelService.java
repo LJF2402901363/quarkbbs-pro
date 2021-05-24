@@ -12,7 +12,7 @@ public interface LabelService extends IService<Label> {
      * @param length
      * @return
      */
-    Page<Label> findByPage(int pageNo, int length);
+    Page<Label> findLabelByPage(int pageNo, int length);
 
     boolean deleteInBatch(Integer[] id);
 

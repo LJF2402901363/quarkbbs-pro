@@ -17,7 +17,7 @@ public interface UserService  extends IService<User> {
      * @param length
      * @return
      */
-    Page<User> findByPage(User user, int pageNo, int length);
+    Page<User> findUserByPage(User user, int pageNo, int length);
 
     /**
      * 恢复/封禁用户

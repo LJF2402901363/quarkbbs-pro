@@ -26,8 +26,8 @@ public class LabelController extends BaseController {
                              @RequestParam(required = false, defaultValue = "1") int start,
                              @RequestParam(required = false, defaultValue = "10") int length) {
 
-        int pageNo = start / length;
-        Page<Label> page = labelService.findByPage(pageNo, length);
+        int pageNo = start / length + 1;
+        Page<Label> page = labelService.findLabelByPage(pageNo, length);
         PageResult<List<Label>> result = new PageResult<>(draw,
                 page.getTotal(),
                 page.getSize(),

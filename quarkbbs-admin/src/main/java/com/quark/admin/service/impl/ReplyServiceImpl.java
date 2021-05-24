@@ -21,9 +21,9 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao,Reply> implements Rep
     @Autowired
     private ReplyDao replyDao;
     @Override
-    public Page<Reply> findByPage(Reply reply, int pageNo, int length) {
+    public Page<Reply> findReplyByPage(Reply reply, int pageNo, int length) {
         Page<Reply> page = new Page<>(pageNo,length);
-        page = replyDao.findByPage(page,reply);
+        page = replyDao.findReplyByPage(page,reply);
         return page;
     }
     public boolean deleteInBatch(Integer[] ids) {

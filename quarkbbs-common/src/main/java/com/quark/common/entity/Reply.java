@@ -1,6 +1,7 @@
 package com.quark.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -29,17 +30,16 @@ public class Reply implements Serializable {
 
     //回复时间
     @JsonFormat(pattern = Constants.DATETIME_FORMAT, timezone = "GMT+8")
-    private Date initTime;
+    private Date init_time;
 
     //点赞个数
     private Integer up = 0;
 
     @JsonIgnore
+    @TableField(exist = false)
     private Posts posts;
+    private Integer posts_id;
+    @TableField(exist = false)
     private User user;
-
-    public Integer getId() {
-        return id;
-    }
-
+    private Integer user_id;
 }

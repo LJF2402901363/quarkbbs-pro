@@ -45,5 +45,5 @@ public class Permission implements Serializable{
 
     @JsonIgnore
     @TableField(exist = false)
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 }

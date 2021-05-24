@@ -24,19 +24,21 @@ import java.util.Date;
 public class Posts implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
+    private Integer label_id;
     private Label label;
     private String title;
     //内容
     private String content;
     //发布时间
     @JsonFormat(pattern = Constants.DATETIME_FORMAT, timezone = "GMT+8")
-    private Date initTime;
+    private Date init_time;
     //是否置顶
     private boolean top;
     //是否精华
     private boolean good;
     //与用户的关联关系
     private User user;
+    private Integer user_id;
     //回复数量
     private int replyCount = 0;
 }

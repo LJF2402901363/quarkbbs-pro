@@ -36,4 +36,8 @@ public class AdminUserDaoTest {
         });
 
     }
+    @Test
+    public  void test(){
+
+    }
 }

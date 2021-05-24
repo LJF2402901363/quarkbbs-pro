@@ -20,7 +20,7 @@ public interface ReplyDao extends BaseMapper<Reply> {
     @Cacheable
     List<Reply> findAll();
 
-    Page<Reply> findByPage(@Param("page") Page<Reply> page, @Param("reply") Reply reply);
+    Page<Reply> findReplyByPage(@Param("page") Page<Reply> page, @Param("reply") Reply reply);
     Page<Reply> findByPageById(@Param("page") Page<Reply> page, @Param("id") Integer id);
 
 }

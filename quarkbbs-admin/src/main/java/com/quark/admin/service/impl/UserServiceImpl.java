@@ -21,9 +21,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao,User> implements UserSe
     @Autowired
      private UserDao userDao;
     @Override
-    public Page<User> findByPage(User user, int pageNo, int length) {
+    public Page<User> findUserByPage(User user, int pageNo, int length) {
         Page<User> page = new Page<>(pageNo, length);
-       page = userDao.findByPage(page,user);
+       page = userDao.findUserByPage(page,user);
         return page;
     }
 

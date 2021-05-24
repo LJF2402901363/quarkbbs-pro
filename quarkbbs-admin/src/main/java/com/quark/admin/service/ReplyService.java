@@ -19,7 +19,7 @@ public interface ReplyService extends IService<Reply> {
      * @param length
      * @return
      */
-   Page<Reply> findByPage(Reply reply, int pageNo, int length);
+   Page<Reply> findReplyByPage(Reply reply, int pageNo, int length);
 
     boolean deleteInBatch(Integer[] id);
 

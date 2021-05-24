@@ -23,7 +23,6 @@ spring:
 #mybatisplus
 mybatis-plus:
   configuration:
-    #
     map-underscore-to-camel-case: false
     auto-mapping-behavior: full
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
@@ -32,4 +31,4 @@ mybatis-plus:
 logging:
   level:
     org.springframework: warn
-    com.quark.admin: debug
+    com.quark: debug

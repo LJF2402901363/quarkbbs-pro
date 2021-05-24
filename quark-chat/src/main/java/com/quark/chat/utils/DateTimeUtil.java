@@ -133,8 +133,4 @@ public class DateTimeUtil {
     }
     
     
-    public static void main(String[] args) {
-    	System.out.println(convertDate("2015-11-10 20:33", "yy年MM月dd日 hh时"));
-		System.out.println(getCurrentMonth());
-	}
 }

@@ -33,13 +33,22 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     @Override
     public List<Permission> loadUserPermission(Integer id) {
         List<Permission> perlist = new ArrayList<>();
-        AdminUser user = adminUserDao.selectById(id);
-        if (user.getRoles().size() > 0) {
-            user.getRoles().stream()
-                    .filter(role -> role.getPermissions().size() > 0)
-                    .forEach(role -> {
-                        perlist.addAll(role.getPermissions().stream().filter(p -> p.getParentid() > 0).collect(Collectors.toList()));
-                    });
+        AdminUser user = adminUserDao.findAdminUserById(id);
+        if (Objects.isNull(user) || Objects.isNull(user.getRoles())){
+            return  perlist;
+        }
+        Set<Role> roles = user.getRoles();
+        for (Role role:roles){
+            List<Permission> permissionslist =  permissionDao.findRolePermissionByRoleId(role.getId());
+            if (Objects.isNull(permissionslist)||permissionslist.size() == 0){
+                continue;
+            }
+            Collections.sort(permissionslist,Comparator.comparing(Permission::getSort));
+            permissionslist.forEach(p -> {
+                if (p.getParentid() > 0 ){
+                    perlist.add(p);
+                }
+            });
         }
         return perlist;
     }
@@ -47,23 +56,29 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     @Override
     public List<Permission> loadUserPermissionByType(Integer id, Integer type) {
         List<Permission> perlist = new ArrayList<>();
-        AdminUser user = adminUserDao.selectById(id);
-        if (user.getRoles().size() > 0) {
-            user.getRoles().stream()
-                    .filter(role -> role.getPermissions().size() > 0)
-                    .forEach(role -> {
-                        perlist.addAll(role.getPermissions().stream().filter(p ->p.getParentid() > 0 && p.getType() == type)
-                                .sorted(Comparator.comparing(Permission::getSort))
-                                .collect(Collectors.toList()));
-                    });
+        AdminUser user = adminUserDao.findAdminUserById(id);
+        if (Objects.isNull(user) || Objects.isNull(user.getRoles())){
+            return  perlist;
         }
-
+       Set<Role> roles = user.getRoles();
+        for (Role role:roles){
+            List<Permission> permissionslist =  permissionDao.findRolePermissionByRoleId(role.getId());
+            if (Objects.isNull(permissionslist)||permissionslist.size() == 0){
+                continue;
+            }
+            Collections.sort(permissionslist,Comparator.comparing(Permission::getSort));
+            permissionslist.forEach(p -> {
+                if (p.getParentid() > 0 && p.getType() == type){
+                   perlist.add(p);
+                }
+            });
+        }
         return perlist;
     }
 
     @Override
     public List<Permission> findPermissionsAndSelected(Integer id) {
-       Role role = roleDao.selectById(id);
+       Role role = roleDao.findRoleByRoleId(id);
        if (role == null){
            return  new ArrayList<Permission>();
        }
@@ -78,7 +93,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     @Override
     public Page<Permission> findByPage(int pageNo, int length) {
         Page<Permission> page = new Page<>(pageNo, length);
-        page = this.page(page, null);
+        page = permissionDao.findPermissonByPage(page);
         return page;
     }
     public boolean deleteInBatch(Integer[] ids) {

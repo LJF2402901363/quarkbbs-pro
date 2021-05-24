@@ -32,7 +32,7 @@ public class PostsController extends BaseController {
     public PageResult getAll(Posts posts, Integer uid, String draw,
                              @RequestParam(required = false, defaultValue = "1") int start,
                              @RequestParam(required = false, defaultValue = "10") int length) {
-        int pageNo = start / length;
+        int pageNo = start / length + 1;
         if (uid != null) {
             User user = userService.getById(uid);
             posts.setUser(user);

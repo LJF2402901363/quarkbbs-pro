@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by lhr on 17-7-31.
@@ -20,5 +21,13 @@ public interface AdminUserDao extends BaseMapper<AdminUser> {
 
     Page<AdminUser> findByPage(@Param("page") Page<AdminUser> page, @Param("adminUser") AdminUser adminUser);
 
+    AdminUser findAdminUserById(@Param("id") Integer id);
+    /**
+     * @Description :根据roleId获取所有的AdminUser
+     * @Date 23:24 2021/5/23 0023
+     * @Param * @param roleId ：roleId
+     * @return java.util.List<com.quark.common.entity.AdminUser>
+     **/
+    Set<AdminUser> findAdminUserByRoleId(@Param("roleId") Integer roleId);
 //    List<AdminUser> findAll(Specification specification, SpringDataWebProperties.Sort sort);
 }

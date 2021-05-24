@@ -13,6 +13,7 @@ import java.util.List;
 @CacheConfig(cacheNames = "users")
 public interface UserDao extends BaseMapper<User> {
 
+    User findUserByUserId(@Param("userId") Integer userId);
     User findByUsername(@Param("username") String username);
 
     User findByEmail(@Param("email") String email);
@@ -20,5 +21,5 @@ public interface UserDao extends BaseMapper<User> {
 //    @Query(value = "select u.id, u.username , u.icon from quark_user u where DATE_SUB(CURDATE(), INTERVAL 30 DAY) <=DATE(u.init_time) ORDER BY u.id DESC limit 12" ,nativeQuery = true)
     List<User> findNewUser(@Param("startTime")String startTime,@Param("endTime")String endTime);
 
-    Page<User> findByPage(@Param("page") Page<User> page, @Param("user") User user);
+    Page<User> findUserByPage(@Param("page") Page<User> page, @Param("user") User user);
 }

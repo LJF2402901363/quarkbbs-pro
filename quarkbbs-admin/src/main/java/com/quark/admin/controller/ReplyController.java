@@ -11,7 +11,6 @@ import com.quark.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,13 +32,13 @@ public class ReplyController extends BaseController {
     public PageResult getAll(Reply reply, Integer uid, String draw,
                              @RequestParam(required = false, defaultValue = "1") int start,
                              @RequestParam(required = false, defaultValue = "10") int length) {
-        int pageNo = start / length;
+        int pageNo = start / length + 1 ;
         if (uid!=null){
             User user = userService.getById(uid);
             reply.setUser(user);
         }
 
-        Page<Reply> page = replyService.findByPage(reply, pageNo, length);
+        Page<Reply> page = replyService.findReplyByPage(reply, pageNo, length);
         PageResult<List<Reply>> result = new PageResult<>(
                 draw,
                 page.getTotal(),

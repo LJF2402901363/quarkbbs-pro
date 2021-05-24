@@ -22,9 +22,9 @@ public class LabelServiceImpl extends ServiceImpl<LabelDao,Label> implements Lab
    @Autowired
    private LabelDao labelDao;
     @Override
-    public Page<Label> findByPage(int pageNo, int length) {
+    public Page<Label> findLabelByPage(int pageNo, int length) {
       Page<Label> page = new Page<>(pageNo, length);
-      this.page(page,null);
+        page = labelDao.findLabelByPage(page);
         return page;
     }
 
