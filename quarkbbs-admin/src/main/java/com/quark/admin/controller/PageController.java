@@ -31,6 +31,24 @@ public class PageController {
     }
 
     /**
+     * 用户退出登录
+     * @param request
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/loginout")
+    public String loginout(HttpServletRequest request, AdminUser user) {
+
+        if (StringUtils.isEmpty(user.getUsername())||StringUtils.isEmpty(user.getPassword())){
+            request.setAttribute("msg","用户名或者密码不能为空!");
+            return "login";
+        }
+        Subject subject = SecurityUtils.getSubject();
+        //退出登录
+        subject.logout();
+         return "login";
+    }
+    /**
      * 用户登录
      * @param request
      * @param user
