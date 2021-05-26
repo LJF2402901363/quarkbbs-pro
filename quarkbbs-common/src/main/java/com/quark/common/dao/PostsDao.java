@@ -24,8 +24,22 @@ public interface PostsDao extends BaseMapper<Posts> {
     IPage<Posts> findByUser(@Param("user") User user);
 
     IPage<Posts> findByLabel(@Param("label") Label label);
-
+    /**
+     * @Description :根据posts查找分页数据
+     * @Date 20:03 2021/5/24 0024
+     * @Param * @param page
+     * @param posts ：
+     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.quark.common.entity.Posts>
+     **/
     Page<Posts> findPostsByPage(@Param("page") Page<Posts> page, @Param("posts") Posts posts);
+    /**
+     * @Description :根据posts查找分页数据
+     * @Date 20:03 2021/5/24 0024
+     * @Param * @param page
+     * @param posts ：
+     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.quark.common.entity.Posts>
+     **/
+    Page<Posts> findPostsPageByType(@Param("page") Page<Posts> page, @Param("posts") Posts posts,@Param("type") String type);
     /**
      * @Description :根据id或者posts
      * @Date 2:23 2021/5/24 0024
@@ -35,5 +49,5 @@ public interface PostsDao extends BaseMapper<Posts> {
     Posts findPostById(@Param("postsId")Integer postsId);
     Page<Posts> getPostsByUserId(@Param("page") Page<Posts> page, @Param("id") Integer id);
 
-    Page<Posts> getPostsByLabel(@Param("page") Page<Posts> page, @Param("label") Label label);
+    Page<Posts> getPostsByLabelId(@Param("page") Page<Posts> page, @Param("label_id") Integer label_id);
 }

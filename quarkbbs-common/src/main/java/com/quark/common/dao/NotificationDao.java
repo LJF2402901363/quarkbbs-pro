@@ -16,8 +16,19 @@ public interface NotificationDao extends BaseMapper<Notification> {
 
     long getNotificationCount(@Param("id") Integer id);
 
-    List<Notification> getByTouserOrderByInitTimeDesc(@Param("user")User user);
-
-    int updateByIsRead(@Param("user") User user);
-
+    int updateByIsRead(@Param("userId") Integer userId);
+    /**
+     * @Description :通过用户的id获取全部未读信息
+     * @Date 22:03 2021/5/24 0024
+     * @Param * @param uid ：用户ID
+     * @return java.util.List<com.quark.common.entity.Notification>
+     **/
+    List<Notification> findUnreadNotificationByUserId(@Param("uid") Integer uid);
+    /**
+     * @Description :通过用户的id获取全部已读信息
+     * @Date 22:03 2021/5/24 0024
+     * @Param * @param uid ：用户ID
+     * @return java.util.List<com.quark.common.entity.Notification>
+     **/
+    List<Notification> findReadedNotificationByUserId(@Param("uid")Integer uid);
 }

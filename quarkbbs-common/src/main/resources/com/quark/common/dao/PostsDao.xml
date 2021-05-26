@@ -40,17 +40,30 @@
     <select id="getPostsByUserId" resultMap="postMap">
         select * from quark_posts where user_id = #{id} order by init_time desc
     </select>
-    <select id="getPostsByLabel" resultMap="postMap">
-        select * from quark_posts
-        <where>
-            <if test="label != null">
-                <if test="label.name != null and label.name != ''">
-                    name like concat('%',#{label.name},'%')
-                </if>
-            </if>
-        </where>
+    <select id="getPostsByLabelId" resultMap="postMap">
+        select * from quark_posts  where  label_id = #{label_id}
     </select>
     <select id="findPostById" resultMap="postMap">
         select * from quark_posts where id = #{postsId}
+    </select>
+    <select id="findPostsPageByType" resultMap="postMap">
+        select * from quark_posts
+        <where>
+            <if test="posts != null">
+                <if test="posts.user_id !=null ">
+                    user_id = #{posts.user_id}
+                </if>
+                <if test="posts.title !=null and  posts.title != ''">
+                    and   title like concat('%',#{posts.title},'%')
+                </if>
+
+            </if>
+            <if test="type !=null and type =='good'">
+                and good = 1
+            </if>
+            <if test="type !=null and type =='top'">
+                and good = 1
+            </if>
+        </where>
     </select>
 </mapper>

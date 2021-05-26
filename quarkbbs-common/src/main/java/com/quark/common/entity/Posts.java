@@ -1,6 +1,7 @@
 package com.quark.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -25,6 +26,7 @@ public class Posts implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private Integer label_id;
+    @TableField(exist = false)
     private Label label;
     private String title;
     //内容
@@ -37,8 +39,10 @@ public class Posts implements Serializable {
     //是否精华
     private boolean good;
     //与用户的关联关系
+    @TableField(exist = false)
     private User user;
     private Integer user_id;
     //回复数量
+    @TableField(exist = false)
     private int replyCount = 0;
 }

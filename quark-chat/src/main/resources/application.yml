@@ -7,6 +7,7 @@ spring:
         min-idle: 1
         max-idle: 8
     port: 6379
+    password: root
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
@@ -45,3 +46,4 @@ mybatis-plus:
 logging:
   level:
     org.springframework: warn
+    com.quark: debug

@@ -3,7 +3,6 @@ package com.quark.rest.controller;
 import com.quark.common.base.BaseController;
 import com.quark.common.dto.QuarkResult;
 import com.quark.common.entity.Notification;
-import com.quark.common.entity.User;
 import com.quark.rest.service.NotificationService;
 import com.quark.rest.service.UserService;
 import io.swagger.annotations.Api;
@@ -12,7 +11,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 /**
@@ -35,11 +33,12 @@ public class NotificationController extends BaseController {
             @ApiImplicitParam(name = "uid",value = "用户的id",dataType ="int")
     })
     @GetMapping("/{uid}")
-    public QuarkResult getAllNotification(@PathVariable("uid") Integer uid) {
+    public QuarkResult getAllUnreadNotification(@PathVariable("uid") Integer uid) {
         QuarkResult result = restProcessor(() -> {
-            User user = userService.getById(uid);
-            if (user==null) return QuarkResult.warn("用户不存在！");
-            List<Notification> list = notificationService.findByUser(user);
+            if (uid == null || uid < 0 ){
+                return QuarkResult.warn("用户不存在！");
+            }
+            List<Notification> list = notificationService.findUnreadNotificationByUserId(uid);
             return QuarkResult.ok(list);
         });
         return result;
@@ -52,9 +51,10 @@ public class NotificationController extends BaseController {
     @DeleteMapping("/{uid}")
     public QuarkResult deleteAllNotification(@PathVariable("uid") Integer uid){
         QuarkResult result = restProcessor(() -> {
-            User user = userService.getById(uid);
-            if (user == null) return QuarkResult.warn("用户不存在！");
-            notificationService.deleteByUser(user);
+            if (uid == null || uid < 0 ){
+                return QuarkResult.warn("用户不存在！");
+            }
+            notificationService.deleteNotificationByUserId(uid);
             return QuarkResult.ok();
         });
 

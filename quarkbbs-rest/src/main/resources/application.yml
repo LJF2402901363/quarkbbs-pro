@@ -9,6 +9,7 @@ spring:
         min-idle: 1
         max-idle: 8
     port: 6379
+    password: root
   servlet:
     multipart:
       enabled: true
@@ -17,7 +18,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
     password: root
-    url: jdbc:mysql://localhost:3306/quarkCommunity?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/quarkbbs?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       min-idle: 2
@@ -29,22 +30,22 @@ spring:
         stat:
           enabled: true
           log-slow-sql: true
-          slow-sql-millis: 1000
+          slow-sql-millis: 3000
           merge-sql: true
         wall:
           config:
             multi-statement-allow: true
-#配置mybatisplus
+#mybatisplus
 mybatis-plus:
   configuration:
-    #关闭查询时默认下划线映射
+    #
     map-underscore-to-camel-case: false
     auto-mapping-behavior: full
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
   mapper-locations: classpath:com/quark/common/dao/*.xml
   type-aliases-package: com.quark.common.entity
-  global-config:
-    db-config:
-      logic-delete-field: isDeleted
-      logic-delete-value: 1
-      logic-not-delete-value: 0
+#  global-config:
+#    db-config:
+#      logic-delete-field: isDeleted
+#      logic-delete-value: 1
+#      logic-not-delete-value: 0

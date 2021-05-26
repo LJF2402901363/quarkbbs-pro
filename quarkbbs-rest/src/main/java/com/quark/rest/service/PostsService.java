@@ -21,15 +21,32 @@ public interface PostsService extends IService<Posts> {
      */
     void savePosts(Posts posts,Integer labelId,User user);
     /**
-     * 翻页查询帖子
-     * @param type
-     * @param search
-     * @param pageNo
-     * @param length
-     * @return
-     */
-    Page<Posts> getPostsByPage(String type ,String search, int pageNo,int length);
-
+     * @Description :模糊搜素置顶帖子
+     * @Date 18:25 2021/5/25 0025
+     * @Param * @param search  模糊搜索字符串
+     * @param pageNo 起始页
+     * @param length ：每页大小
+     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.quark.common.entity.Posts>
+     **/
+    Page<Posts> getPostsPageByTop(String search, int pageNo,int length);
+    /**
+     * @Description :模糊搜素好评帖子
+     * @Date 18:25 2021/5/25 0025
+     * @Param * @param search  模糊搜索字符串
+     * @param pageNo 起始页
+     * @param length ：每页大小
+     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.quark.common.entity.Posts>
+     **/
+    Page<Posts> getPostsPageByGood(String search, int pageNo,int length);
+    /**
+     * @Description :模糊搜素帖子
+     * @Date 18:25 2021/5/25 0025
+     * @Param * @param search  模糊搜索字符串
+     * @param pageNo 起始页
+     * @param length ：每页大小
+     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.quark.common.entity.Posts>
+     **/
+    Page<Posts> getPostsPage(String search, int pageNo,int length);
     /**
      * 获取用户最近发布的10个POSTS
      * @param id
@@ -40,8 +57,8 @@ public interface PostsService extends IService<Posts> {
 
     /**
      * 根据标签分页获取获取Posts
-     * @param label
+     * @param labelId
      * @return
      */
-    Page<Posts> getPostsByLabel(Label label, int pageNo, int lenght);
+    Page<Posts> getPostsByLabelId(Integer labelId, int pageNo, int lenght);
 }

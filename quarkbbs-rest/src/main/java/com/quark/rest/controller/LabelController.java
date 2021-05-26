@@ -32,7 +32,7 @@ public class LabelController extends BaseController{
     public QuarkResult getAllLabel(){
 
         QuarkResult result = restProcessor(() -> {
-            List<Label> labels = labelService.getBaseMapper().selectList(null);
+            List<Label> labels = labelService.list();
             return QuarkResult.ok(labels);
         });
 

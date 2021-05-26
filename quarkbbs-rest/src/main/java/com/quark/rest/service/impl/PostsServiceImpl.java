@@ -9,14 +9,12 @@ import com.quark.common.entity.Label;
 import com.quark.common.entity.Posts;
 import com.quark.common.entity.User;
 import com.quark.common.exception.ServiceProcessException;
+import com.quark.rest.constant.PostsTypeEnum;
 import com.quark.rest.service.PostsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 
@@ -48,8 +46,10 @@ public class PostsServiceImpl extends ServiceImpl<PostsDao, Posts> implements Po
 
             //添加帖子
             posts.setLabel(label);
-            posts.setInitTime(new Date());
+            posts.setLabel_id(labelId);
+            posts.setInit_time(new Date());
             posts.setUser(user);
+            posts.setUser_id(user.getId());
             postsDao.insert(posts);
         } catch (ServiceProcessException e) {
             throw e;
@@ -60,26 +60,39 @@ public class PostsServiceImpl extends ServiceImpl<PostsDao, Posts> implements Po
     }
 
     @Override
-    public Page<Posts> getPostsByPage(String type, String search, int pageNo, int length) {
-        List<Sort.Order> orders = new ArrayList<>();
-        orders.add(new Sort.Order(Sort.Direction.DESC, "top"));
-        orders.add(new Sort.Order(Sort.Direction.DESC, "id"));
+    public Page<Posts> getPostsPageByTop(String search, int pageNo, int length) {
+        return getPostsByPage(PostsTypeEnum.TYPE_TOP.getCode(),search,pageNo,length);
+    }
+
+    @Override
+    public Page<Posts> getPostsPageByGood(String search, int pageNo, int length) {
+        return getPostsByPage(PostsTypeEnum.TYPE_GOOD.getCode(), search,pageNo,length);
+    }
+
+    @Override
+    public Page<Posts> getPostsPage(String search, int pageNo, int length) {
+        return getPostsByPage(PostsTypeEnum.DEFAULT_TYPE.getCode(),search,pageNo,length);
+    }
+
+    private Page<Posts> getPostsByPage(String type, String search, int pageNo, int length) {
         Page<Posts> page = new Page<>(pageNo, length);
-        page = postsDao.getPostsByPage(page,type,search);
+        Posts posts = new Posts();
+        posts.setTitle(search);
+        page = postsDao.findPostsPageByType(page,posts,type);
         return page;
     }
 
     @Override
     public List<Posts> getPostsByUserId(Integer userId) {
-        Page<Posts> page = new Page<>(1,10);
+        Page<Posts> page = new Page<>(1,50);
         page =  postsDao.getPostsByUserId(page,userId);
        return  page.getRecords();
     }
 
     @Override
-    public Page<Posts> getPostsByLabel(Label label, int pageNo, int lenght) {
+    public Page<Posts> getPostsByLabelId(Integer labelId, int pageNo, int lenght) {
        Page<Posts> page = new Page<>(pageNo,lenght);
-        page = postsDao.getPostsByLabel(page,label);
+        page = postsDao.getPostsByLabelId(page,labelId);
         return page;
     }
 

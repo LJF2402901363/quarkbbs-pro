@@ -148,12 +148,7 @@
             <!--Spring RESTful接口文档化 -->
             <dependency>
                 <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${springfox.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
+                <artifactId>springfox-boot-starter</artifactId>
                 <version>${springfox.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/com.baomidou/mybatisplus-spring-boot-starter -->

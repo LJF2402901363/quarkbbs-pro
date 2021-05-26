@@ -63,7 +63,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         User user = new User();
         user.setEmail(email);
         user.setUsername(username);
-        user.setInitTime(new Date());
+        user.setInit_time(new Date());
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
         userDao.insert(user);
     }

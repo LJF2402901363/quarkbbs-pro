@@ -7,6 +7,7 @@ import com.quark.common.entity.Label;
 import com.quark.common.entity.Posts;
 import com.quark.common.entity.Reply;
 import com.quark.common.entity.User;
+import com.quark.rest.constant.PostsTypeEnum;
 import com.quark.rest.service.LabelService;
 import com.quark.rest.service.PostsService;
 import com.quark.rest.service.ReplyService;
@@ -80,7 +81,14 @@ public class PostsController extends BaseController {
         QuarkResult result = restProcessor(() -> {
             if (!type.equals("good") && !type.equals("top") && !type.equals(""))
                 return QuarkResult.error("类型错误!");
-            Page<Posts> page = postsService.getPostsByPage(type, search, pageNo - 1, length);
+            Page<Posts> page = null;
+            if (PostsTypeEnum.DEFAULT_TYPE.getCode().equals(type)){
+                page = postsService.getPostsPage( search, pageNo , length);
+            }else  if(PostsTypeEnum.TYPE_TOP.getCode().equals(type)){
+                page = postsService.getPostsPageByTop( search, pageNo , length);
+            }else {
+                page = postsService.getPostsPageByGood( search, pageNo , length);
+            }
             return QuarkResult.ok(page.getRecords(), page.getTotal(), Math.toIntExact(page.getSize()));
 
         });
@@ -131,7 +139,7 @@ public class PostsController extends BaseController {
         QuarkResult result = restProcessor(() -> {
             Label label = labelService.getById(labelid);
             if (label == null) return QuarkResult.error("标签不存在");
-            Page<Posts> page = postsService.getPostsByLabel(label, pageNo - 1, length);
+            Page<Posts> page = postsService.getPostsByLabelId(labelid, pageNo , length);
             return QuarkResult.ok(page.getRecords(), page.getTotal(), Math.toIntExact(page.getSize()));
 
         });

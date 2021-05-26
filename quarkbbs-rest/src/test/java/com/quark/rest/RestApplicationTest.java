@@ -6,8 +6,7 @@ import com.quark.rest.service.PostsService;
 import com.quark.rest.service.RedisService;
 import com.quark.rest.service.ReplyService;
 import com.quark.rest.service.UserService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,8 +21,6 @@ import javax.sql.DataSource;
  * user.setUsername("lhr");
  * user.setPassword("root");
  */
-@RunWith(SpringRunner.class)
-@TestPropertySource(locations = {"classpath:rest.properties"})
 @SpringBootTest
 public class RestApplicationTest {
 

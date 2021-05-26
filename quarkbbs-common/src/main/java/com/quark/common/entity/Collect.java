@@ -1,6 +1,7 @@
 package com.quark.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,8 +27,11 @@ public class Collect implements Serializable{
 
     @TableId(type = IdType.AUTO)
     private Integer id;
-
+    private Integer posts_id;
+    @TableField(exist = false)
     private Posts posts;
+    private Integer user_id;
+    @TableField(exist = false)
     private User user;
 
     //收藏时间

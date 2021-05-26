@@ -3,7 +3,6 @@ package com.quark.rest.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.quark.common.dao.NotificationDao;
 import com.quark.common.entity.Notification;
-import com.quark.common.entity.User;
 import com.quark.rest.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,15 +25,15 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationDao,Notific
     }
 
     @Override
-    public List<Notification> findByUser(User user) {
-        List<Notification> list = notificationDao.getByTouserOrderByInitTimeDesc(user);
-        notificationDao.updateByIsRead(user);
+    public List<Notification> findReadedNotificationByUserId(Integer userId) {
+        List<Notification> list = notificationDao.findReadedNotificationByUserId(userId);
+        notificationDao.updateByIsRead(userId);
         return list;
     }
 
     @Override
-    public void deleteByUser(User user) {
-        List<Notification> list = notificationDao.getByTouserOrderByInitTimeDesc(user);
+    public void deleteNotificationByUserId(Integer uid) {
+        List<Notification> list = notificationDao.findUnreadNotificationByUserId(uid);
         if (Objects.isNull(list) || list.size() == 0) {
             return;
         }
@@ -42,5 +41,12 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationDao,Notific
         list.forEach(e->{
             notificationDao.deleteById(e.getId());
         });
+    }
+
+    @Override
+    public List<Notification> findUnreadNotificationByUserId(Integer uid) {
+        List<Notification> list = notificationDao.findUnreadNotificationByUserId(uid);
+        notificationDao.updateByIsRead(uid);
+        return list;
     }
 }

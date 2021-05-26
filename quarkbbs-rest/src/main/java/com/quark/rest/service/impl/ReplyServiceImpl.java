@@ -56,7 +56,7 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, Reply> implements Re
             postsDao.insert(posts);
 
             //添加回复
-            reply.setInitTime(new Date());
+            reply.setInit_time(new Date());
             reply.setUser(user);
             reply.setPosts(posts);
             replyDao.insert(reply);
@@ -68,7 +68,7 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, Reply> implements Re
                 notification.setPosts(posts);
                 notification.setFromuser(user);
                 notification.setTouser(posts.getUser());
-                notification.setInitTime(new Date());
+                notification.setInit_time(new Date());
                 notificationService.save(notification);
                 // 使用WebSocket进行1对1通知
                 webSocketService.sendToOne(posts.getUser().getId());

@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @Author LHR
  * Create By 2017/8/30
  */
-@Configuration
+//@Configuration
 public class MyAdapter implements WebMvcConfigurer {
 
 
@@ -22,6 +22,5 @@ public class MyAdapter implements WebMvcConfigurer {
     public void addViewControllers( ViewControllerRegistry registry ) {
         registry.addViewController( "" ).setViewName( "redirect:/swagger-ui.html" );
         registry.setOrder( Ordered.HIGHEST_PRECEDENCE );
-//        super.addViewControllers( registry );
     }
 }
