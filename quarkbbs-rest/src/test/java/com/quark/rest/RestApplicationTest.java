@@ -43,7 +43,7 @@ public class RestApplicationTest {
     AdminUserDao dao;
 
     @Autowired
-    RedisService<Integer> redisService;
+    RedisService redisService;
 
     @Autowired
     PostsDao postsDao;

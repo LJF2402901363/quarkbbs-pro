@@ -101,7 +101,7 @@ public class UserController extends BaseController {
         QuarkResult result = restProcessor(() -> {
             HashMap<String, Object> map = new HashMap<>();
             User user = userService.getUserByToken(token);
-            if (user == null) return QuarkResult.warn("session过期,请重新登录");
+            if (user == null ) return QuarkResult.warn("session过期,请重新登录");
             long count = notificationService.getNotificationCount(user.getId());
             map.put("user",user);
             map.put("messagecount",count);
@@ -119,7 +119,10 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "sex", value = "要修改的性别：数值0为男，1为女",dataType = "int"),
     })
     @PutMapping("/{token}")
-    public QuarkResult updateUser(@PathVariable("token") String token,String username,String signature,Integer sex){
+    public QuarkResult updateUser(@PathVariable("token") String token,
+                                  @RequestParam(value = "username",defaultValue = "") String username,
+                                  @RequestParam(value = "signature",defaultValue = "") String signature,
+                                  @RequestParam(value = "sex",defaultValue = "0") Integer sex){
         QuarkResult result = restProcessor(() -> {
             if (!userService.checkUserName(username)) return QuarkResult.warn("用户名重复！");
             if (sex != 0 && sex != 1) return QuarkResult.warn("性别输入错误！");

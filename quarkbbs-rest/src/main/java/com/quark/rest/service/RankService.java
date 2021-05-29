@@ -15,11 +15,11 @@ public interface RankService {
      * 获取最近一周热帖排行榜
      * @return
      */
-   List<Object> findPostsRank();
+   List<Posts> findPostsRank();
 
     /**
      * 获取最近一周的新注册用户
      * @return
      */
-   List<Object> findUserRank();
+   List<User> findUserRank();
 }

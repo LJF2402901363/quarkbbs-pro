@@ -27,39 +27,22 @@ public class RankServiceImpl  implements RankService{
     private UserDao userDao;
 
     @Override
-    public List<Object> findPostsRank() {
+    public List<Posts> findPostsRank() {
         LocalDateTime endTime = LocalDateTime.now();
         LocalDateTime startTime = endTime.minusDays(30L);
         String endTimeStr = DateUtil.dateToString(endTime);
         String startTimeStr = DateUtil.dateToString(startTime);
-        List<User> userList = userDao.findNewUser(startTimeStr,endTimeStr);
         List<Posts> hot = postsDao.findHot(startTimeStr,endTimeStr);
-        List<Object> list = new ArrayList<>();
-        if (Objects.isNull(hot) || hot.size() == 0){
-            return list;
-        }
-
-        hot.forEach(e->{
-            list.add(e);
-        });
-        return list;
+        return hot;
     }
 
     @Override
-    public List<Object> findUserRank() {
+    public List<User> findUserRank() {
         LocalDateTime endTime = LocalDateTime.now();
         LocalDateTime startTime = endTime.minusDays(30L);
         String endTimeStr = DateUtil.dateToString(endTime);
         String startTimeStr = DateUtil.dateToString(startTime);
         List<User> userList = userDao.findNewUser(startTimeStr,endTimeStr);
-        List<Object> list = new ArrayList<>();
-        if (Objects.isNull(userList) || userList.size() == 0){
-            return list;
-        }
-
-        userList.forEach(e->{
-            list.add(e);
-        });
-        return list;
+       return userList;
     }
 }

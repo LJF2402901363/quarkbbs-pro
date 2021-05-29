@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author LHR
@@ -29,7 +30,7 @@ public class RankController extends BaseController {
     private RankService rankService;
 
     @Autowired
-    private RedisService<List<Object>> redisService;
+    private RedisService redisService;
 
     @Value("${REDIS_RANK_POSTS}")
     private String REDIS_RANK_POSTS;
@@ -41,12 +42,14 @@ public class RankController extends BaseController {
     @GetMapping("/topPosts")
     public QuarkResult getTotPosts() {
         QuarkResult result = restProcessor(() -> {
-            List<Object> hot = redisService.getString(REDIS_RANK_POSTS);
-            if (hot != null) {
+            //Redis中存在从Redis获取
+            List<Posts> hot = redisService.getCacheList(REDIS_RANK_POSTS);
+            if (Objects.nonNull(hot) && hot.size() > 0) {
                 return QuarkResult.ok(hot);
             }
+            //从数据库中获取
             hot = rankService.findPostsRank();
-            redisService.cacheString(REDIS_RANK_POSTS, hot, 1);
+            redisService.setCacheList(REDIS_RANK_POSTS, hot);
             return QuarkResult.ok(hot);
         });
         return result;
@@ -56,11 +59,14 @@ public class RankController extends BaseController {
     @GetMapping("/newUsers")
     public QuarkResult getNewUser() {
         QuarkResult result = restProcessor(() -> {
-            List<Object> users = redisService.getString(REDIS_RANK_USERS);
-            if (users != null) return QuarkResult.ok(users);
-
+            List<User> users = redisService.getCacheList(REDIS_RANK_USERS);
+            if (Objects.nonNull(users) && users.size() > 0) {
+                //Redis中存在从Redis获取
+                return QuarkResult.ok(users);
+            }
+            //从数据库中获取
             users = rankService.findUserRank();
-            redisService.cacheString(REDIS_RANK_USERS, users, 1);
+            redisService.setCacheList(REDIS_RANK_USERS, users);
             return QuarkResult.ok(users);
         });
         return result;

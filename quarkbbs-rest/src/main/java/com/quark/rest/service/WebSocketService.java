@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class WebSocketService {
 
     @Autowired
-    private RedisService<Integer> redisService;
+    private RedisService redisService;
 
 //    @Autowired
 //    private UserService userService;
@@ -41,7 +41,7 @@ public class WebSocketService {
      * @param id
      */
     public void sendToOne(Integer id){
-        boolean islogin = redisService.setHasValue(REDIS_USERID_KEY, id);
+        boolean islogin = redisService.hasSetValue(REDIS_USERID_KEY, id);
         //判断用户是否已经登录
 //        boolean islogin = userService.loginId.contains(id);
         if (islogin){

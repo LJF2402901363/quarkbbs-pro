@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,10 +25,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserService {
 
     @Autowired
-    private RedisService<Integer> redisSocketService;
+    private RedisService redisSocketService;
 
     @Autowired
-    private RedisService<User> redisService;
+    private RedisService redisService;
 
     @Value("${REDIS_USERID_KEY}")
     private String REDIS_USERID_KEY;
@@ -71,61 +72,60 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     @Override
     public String LoginUser(User user) {
         String token = UUID.randomUUID().toString();
-        redisService.cacheString(REDIS_USER_KEY + token, user, REDIS_USER_TIME);
-        redisSocketService.cacheSet(REDIS_USERID_KEY,user.getId());
+        redisService.setCacheMapValue(REDIS_USER_KEY , token, user);
+        redisSocketService.setCacheSet(REDIS_USERID_KEY,user.getId());
 //        loginId.add(user.getId());//维护一个登录用户的set
         return token;
     }
 
     @Override
     public User getUserByToken(String token) {
-        User user = redisService.getStringAndUpDate(REDIS_USER_KEY + token, REDIS_USER_TIME);
+        User user = redisService.getValueAndUpDate(REDIS_USER_KEY ,token, REDIS_USER_TIME);
         return user;
     }
 
     @Override
     public void LogoutUser(String token) {
         User user = getUserByToken(token);
-        redisService.deleteString(REDIS_USER_KEY + token);
-        redisSocketService.deleteSet(REDIS_USERID_KEY,user.getId());
+        redisService.deleteCacheMapKey(REDIS_USER_KEY ,token);
+        redisSocketService.deleteFromSet(REDIS_USERID_KEY,user.getId());
 //        loginId.remove(user.getId());//维护一个登录用户的set
     }
 
     @Override
     public void updateUser(String token, String username, String signature, Integer sex) {
-        User cacheuser = redisService.getString(REDIS_USER_KEY + token);
+        User cacheuser = redisService.getValueByMapKey(REDIS_USER_KEY , token);
         if (cacheuser == null) throw new ServiceProcessException("session过期,请重新登录");
         User user = userDao.selectById(cacheuser.getId());
-        user.setUsername(username);
         user.setSex(sex);
         user.setSignature(signature);
-        userDao.insert(user);
-        redisService.cacheString(REDIS_USER_KEY + token, user, REDIS_USER_TIME);
+        userDao.updateById(user);
+        redisService.setCacheMapValue(REDIS_USER_KEY ,token, user);
     }
 
     @Override
     public void updataUserIcon(String token, String icon) {
-        User cacheuser = redisService.getString(REDIS_USER_KEY + token);
+        User cacheuser = redisService.getValueByMapKey(REDIS_USER_KEY ,token);
         if (cacheuser == null)
             throw new ServiceProcessException("用户Session过期，请重新登录");
         User user = userDao.selectById(cacheuser.getId());
         user.setIcon(icon);
-        userDao.insert(user);
-        redisService.cacheString(REDIS_USER_KEY + token, user, REDIS_USER_TIME);
+        userDao.updateById(user);
+        redisService.setCacheMapValue(REDIS_USER_KEY , token, user);
     }
 
 
     @Override
     public void updateUserPassword(String token, String oldpsd, String newpsd) {
-        User cacheuser = redisService.getString(REDIS_USER_KEY + token);
+        User cacheuser = redisService.getValueByMapKey(REDIS_USER_KEY , token);
         if (cacheuser == null)
             throw new ServiceProcessException("用户Session过期，请重新登录");
         User user = userDao.selectById(cacheuser.getId());
         if(!user.getPassword().equals(DigestUtils.md5DigestAsHex(oldpsd.getBytes())))
             throw new ServiceProcessException("原始密码错误,请重新输入");
         user.setPassword(DigestUtils.md5DigestAsHex(newpsd.getBytes()));
-        userDao.insert(user);
-        redisService.deleteString(REDIS_USER_KEY+token);
+        userDao.updateById(user);
+        redisService.deleteCacheMapKey(REDIS_USER_KEY,token);
     }
 
 
