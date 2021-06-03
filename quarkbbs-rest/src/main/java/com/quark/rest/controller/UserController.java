@@ -136,7 +136,7 @@ public class UserController extends BaseController {
     @ApiOperation("根据Token修改用户的密码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "发送给用户的唯一令牌",dataType = "String"),
-            @ApiImplicitParam(name = "newpsd",value = "新的密码",dataType = "String"),
+            @ApiImplicitParam(name = "newpsd",value = "旧的的密码",dataType = "String"),
             @ApiImplicitParam(name = "oldpsd",value = "新的密码",dataType = "String"),
     })
     @PutMapping("/password/{token}")

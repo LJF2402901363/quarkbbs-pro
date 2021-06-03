@@ -27,6 +27,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
-        stompEndpointRegistry.addEndpoint("/quarkServer").setAllowedOrigins("*").withSockJS();//stomp节点
+        stompEndpointRegistry.addEndpoint("/quarkServer").setAllowedOriginPatterns("*").withSockJS();//stomp节点
     }
 }

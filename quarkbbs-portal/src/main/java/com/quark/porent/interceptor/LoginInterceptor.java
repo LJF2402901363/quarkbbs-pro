@@ -1,6 +1,6 @@
 package com.quark.porent.interceptor;
 
-import com.quark.porent.entity.User;
+import com.quark.common.entity.User;
 import com.quark.porent.service.UserService;
 import com.quark.porent.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;

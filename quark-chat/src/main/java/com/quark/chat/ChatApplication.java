@@ -39,10 +39,6 @@ public class ChatApplication  implements CommandLineRunner {
         SpringApplication.run(ChatApplication.class, args);
     }
 
-    @Bean
-    public QuarkChatServer quarkChatServer(){
-        return new QuarkChatServer();
-    }
 
     @Override
     public void run(String... strings) throws Exception {

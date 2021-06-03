@@ -18,13 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @ApiModel(value = "WebSocket接口", description = "用于服务器端对客户都进行消息推送")
 @RestController
 public class WebSocketController {
-
+    @Autowired
     public SimpMessagingTemplate template;
 
-    @Autowired
-    public WebSocketController(SimpMessagingTemplate template) {
-        this.template = template;
-    }
 
     @ApiOperation("WebSocket广播接口：客户端可以在/topic/all监听并接受服务端发回的消息")
     @SendTo("/topic/all")

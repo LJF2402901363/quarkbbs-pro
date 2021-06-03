@@ -6,6 +6,8 @@
  <resultMap id="postMap" type="posts">
      <id column="id" property="id"></id>
      <association property="user" javaType="user" column="user_id" select="com.quark.common.dao.UserDao.findUserByUserId"></association>
+     <association property="label" javaType="label" column="label_id" select="com.quark.common.dao.LabelDao.findLabelByLabelId"></association>
+
  </resultMap>
     <select id="findAll" resultMap="postMap">
         select * from quark_posts

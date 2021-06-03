@@ -1,21 +1,13 @@
 package com.quark.chat.server;
 
-import com.quark.chat.handler.MessageHandler;
-import com.quark.chat.handler.UserAuthHandler;
+import com.quark.chat.filter.ServerSocketFilter;
+import com.quark.chat.serverexcutor.EventLoopExecutorImpl;
 import com.quark.chat.service.ChannelManager;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
-import io.netty.channel.DefaultEventLoopGroup;
-import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.stream.ChunkedWriteHandler;
-import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +19,7 @@ import javax.annotation.PreDestroy;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @Author : ChinaLHR
@@ -40,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class QuarkChatServer implements Server {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private DefaultEventLoopGroup defaultGroup;
+
     private NioEventLoopGroup bossGroup;
     private NioEventLoopGroup workGroup;
     private ChannelFuture future;
@@ -53,47 +43,23 @@ public class QuarkChatServer implements Server {
     @Value("${PORT}")
     private int port;
 
-    @Autowired
-    private UserAuthHandler authHandler;
 
-    @Autowired
-    private MessageHandler messageHandler;
 
     @Autowired
     private ChannelManager manager;
-
+    @Autowired
+    private ServerSocketFilter serverSocketFilter;
     @PostConstruct
     @Override
     public void init() {
         logger.info("server init");
         int cpus = Runtime.getRuntime().availableProcessors();
 
-        defaultGroup = new DefaultEventLoopGroup(8, new ThreadFactory() {
-            private AtomicInteger index = new AtomicInteger(0);
 
-            @Override
-            public Thread newThread(Runnable r) {
-                return new Thread(r, "DEFAULTGROUP" + index.incrementAndGet());
-            }
-        });
 
-        bossGroup = new NioEventLoopGroup(cpus, new ThreadFactory() {
-            private AtomicInteger index = new AtomicInteger(0);
+        bossGroup = new NioEventLoopGroup(cpus, new EventLoopExecutorImpl(cpus,"BOSSGROUP"));
 
-            @Override
-            public Thread newThread(Runnable r) {
-                return new Thread(r, "BOSSGROUP" + index.incrementAndGet());
-            }
-        });
-
-        workGroup = new NioEventLoopGroup(cpus * 10, new ThreadFactory() {
-            private AtomicInteger index = new AtomicInteger(0);
-
-            @Override
-            public Thread newThread(Runnable r) {
-                return new Thread(r, "WORKGROUP" + index.incrementAndGet());
-            }
-        });
+        workGroup = new NioEventLoopGroup(cpus * 10, new EventLoopExecutorImpl(cpus,"WORKGROUP"));
 
         bootstrap = new ServerBootstrap();
         executorService = Executors.newScheduledThreadPool(2);
@@ -108,21 +74,7 @@ public class QuarkChatServer implements Server {
                 .option(ChannelOption.TCP_NODELAY, true)//禁止使用Nagle算法
                 .option(ChannelOption.SO_BACKLOG, 1024)//初始化服务端可连接队列大小
                 .localAddress(new InetSocketAddress(port))
-                .childHandler(new ChannelInitializer<SocketChannel>() {
-
-                    @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(defaultGroup,
-                                new HttpServerCodec(),//请求解码器
-                                new HttpObjectAggregator(65536),//将多个消息转换成单一的消息对象
-                                new ChunkedWriteHandler(),  //支持异步发送大的码流
-                                new IdleStateHandler(60, 0, 0), //定时检测链路是否读空闲
-                                authHandler,//认证Handler
-                                messageHandler//消息Handler
-
-                        );
-                    }
-                });
+                .childHandler(serverSocketFilter);
 
         try{
             future = bootstrap.bind().sync();
@@ -159,8 +111,7 @@ public class QuarkChatServer implements Server {
     @PreDestroy
     @Override
     public void shutdown() {
-        if (defaultGroup != null)
-            defaultGroup.shutdownGracefully();
+
         if (executorService != null)
             executorService.shutdown();
         bossGroup.shutdownGracefully();

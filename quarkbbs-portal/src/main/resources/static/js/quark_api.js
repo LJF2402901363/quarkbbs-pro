@@ -29,6 +29,7 @@ function setCookie(data) {
 }
 
 function getCookie() {
+
     return $.cookie('QUARK_TOKEN');
 }
 

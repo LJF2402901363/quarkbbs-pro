@@ -1,6 +1,6 @@
 package com.quark.porent.service;
 
-import com.quark.porent.entity.User;
+import com.quark.common.entity.User;
 
 /**
  * @Author LHR

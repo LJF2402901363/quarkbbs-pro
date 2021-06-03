@@ -7,6 +7,13 @@ import org.apache.ibatis.annotations.Param;
 
 public interface LabelDao extends BaseMapper<Label> {
     /**
+     * @Description :通过标签的id查找标签
+     * @Date 0:07 2021/5/30 0030
+     * @Param * @param labelId ：标签的ID
+     * @return com.quark.common.entity.Label
+     **/
+    Label findLabelByLabelId(@Param("labelId")Integer labelId);
+    /**
      * @Description :分页查找标签数据
      * @Date 10:35 2021/5/24 0024
      * @Param * @param page ：

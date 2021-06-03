@@ -1,6 +1,6 @@
 package com.quark.porent.service.impl;
 
-import com.quark.porent.entity.User;
+import com.quark.common.entity.User;
 import com.quark.porent.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -10,7 +10,9 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.Headers;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -83,8 +85,9 @@ public class UserAuthHandler extends SimpleChannelInboundHandler {
      * HTTP握手反馈
      */
     private void handleHttpRequest(ChannelHandlerContext ctx, FullHttpRequest request){
+        HttpHeaders headers = request.headers();
         //判断是否是WebSocket协议
-        if (!request.decoderResult().isSuccess() || !"websocket".equals(request.headers().get("Upgrade"))) {
+        if (!request.decoderResult().isSuccess() || !"websocket".equals(headers.get("Upgrade"))) {
             logger.warn("protobuf don't support WebSocket");
             ctx.channel().close();
             return;
@@ -162,4 +165,5 @@ public class UserAuthHandler extends SimpleChannelInboundHandler {
         //MessageHandler处理
         ctx.fireChannelRead(frame.retain());
     }
+
 }

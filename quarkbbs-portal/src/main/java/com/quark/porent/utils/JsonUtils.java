@@ -2,7 +2,7 @@ package com.quark.porent.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.quark.porent.entity.QuarkResult;
+import com.quark.common.dto.QuarkResult;
 
 import java.io.IOException;
 

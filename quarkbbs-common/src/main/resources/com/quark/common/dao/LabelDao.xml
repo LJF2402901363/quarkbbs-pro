@@ -20,4 +20,10 @@
        </where>
    </if>
     </select>
+    <select id="findLabelByLabelId" resultType="label">
+        select * from quark_label
+       <where>
+           id = #{labelId}
+       </where>
+    </select>
 </mapper>

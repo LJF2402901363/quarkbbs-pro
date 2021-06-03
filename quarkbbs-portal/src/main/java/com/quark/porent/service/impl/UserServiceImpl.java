@@ -1,7 +1,7 @@
 package com.quark.porent.service.impl;
 
-import com.quark.porent.entity.QuarkResult;
-import com.quark.porent.entity.User;
+import com.quark.common.dto.QuarkResult;
+import com.quark.common.entity.User;
 import com.quark.porent.service.UserService;
 import com.quark.porent.utils.HttpClientUtils;
 import com.quark.porent.utils.JsonUtils;

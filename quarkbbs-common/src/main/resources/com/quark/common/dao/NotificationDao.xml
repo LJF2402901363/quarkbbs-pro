@@ -15,7 +15,7 @@
     </update>
 
     <select id="getNotificationCount" resultType="java.lang.Long">
-        SELECT count(id) FROM quark_notification  WHERE touser_id = #{id} AND is_read = 0
+        SELECT count(id) FROM quark_notification  WHERE touser_id = #{id} AND isRead = 0
     </select>
     <select id="findUnreadNotificationByUserId" resultMap="notificationMap">
         select * from quark_notification
