@@ -33,7 +33,7 @@ import static com.quark.chat.protocol.QuarkChatType.*;
  * WebSocket握手/用户认证 Handler
  */
 @ChannelHandler.Sharable
-@Scope("prototype")
+//@Scope("prototype")
 @Component
 public class UserAuthHandler extends SimpleChannelInboundHandler {
 
@@ -137,7 +137,7 @@ public class UserAuthHandler extends SimpleChannelInboundHandler {
             throw new UnsupportedOperationException(frame.getClass().getName()+"frame type not supported!!!");
         }
         String message = ((TextWebSocketFrame)frame).text();
-        QuarkClientProtocol clientProto = JSON.parseObject(message, new TypeReference<QuarkClientProtocol>(){});
+        QuarkClientProtocol clientProto = JSON.parseObject(message, QuarkClientProtocol.class);
         byte type = clientProto.getType();
         Channel channel = ctx.channel();
         if (clientProto.getMAGIC()!=QuarkChatProtocol.getMAGIC())return;//过滤Magic格式不正确的消息

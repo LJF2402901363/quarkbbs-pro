@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  * 消息处理Handler
  */
 @ChannelHandler.Sharable
-@Scope("prototype")
+//@Scope("prototype")
 @Component
 public  class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>{
     private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
