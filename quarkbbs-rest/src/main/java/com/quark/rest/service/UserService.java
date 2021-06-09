@@ -51,7 +51,7 @@ public interface UserService extends IService<User> {
      * @param user
      * @return 返回token
      */
-    String LoginUser(User user);
+    String loginUser(User user);
 
 
     /**
@@ -65,7 +65,7 @@ public interface UserService extends IService<User> {
      * 根据Token登出用户
      * @param token
      */
-    void LogoutUser(String token);
+    void logoutUser(String token);
 
 
     /**

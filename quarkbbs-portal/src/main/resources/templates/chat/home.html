@@ -44,158 +44,163 @@
     </div>
 </div>
 <script>
-    var pongtype = 0x02;
-    var authtype = 0x03;
-    var messagetype = 0x05;
-    var socket = null;
-    var isAuth = false;
-    //用户登录
-    function userLogin() {
-        if (!window.WebSocket) {
-            window.WebSocket = window.MozWebSocket;
-        }
-        if (window.WebSocket) {
-            window.socket = new WebSocket(quark_chat_webSocket_api);
-            window.socket.onmessage = function (event) {
-                var data = eval("(" + event.data + ")");
-                console.log("onmessage data:" + JSON.stringify(data));
-                switch (data.type) {
-                    case 0x01://ping type
-                        pongInvake();
-                        break;
-                    case 0x04://auth message
-                        isAuth = data.body.result;
-                        if (!isAuth) {
-                            layer.msg("认证失败,请进行用户登录", {
-                                icon: 7,
-                                time: 2000 //1秒关闭
-                            }, function(){
-                                location.href = "/user/login";
-                            });
-                        }
-                        break;
-                    case 0x06://broadcast message
-                        broadcastInvake(data.body);
-                        break;
-                    case 0x07://userinfo message
-                       userInfoInvake(data.body);
-                        break;
-                    case 0x08://sys message
-                        layer.msg(data.body.msg,{icon:7});
-                        break;
-                    case 0x09://error message
-                        layer.msg(data.body.msg,{
-                            icon:5,
-                            time:2000
-                        },function () {
-                            location.href = "/index";
-                        });
-                        break;
-                }
-            };
-            /*WebSocket 关闭*/
-            window.socket.onclose = function (event) {
-                closeInvake(event);
-            };
+  $(function () {
+      var pongtype = 0x02;
+      var authtype = 0x03;
+      var messagetype = 0x05;
+      var socket = null;
+      var isAuth = false;
+      //用户登录
+      function userLogin() {
+          if (!window.WebSocket) {
+              window.WebSocket = window.MozWebSocket;
+          }
+          if (window.WebSocket) {
+              window.socket = new WebSocket(quark_chat_webSocket_api);
+              console.log("open socket.....");
+              window.socket.onmessage = function (event) {
+                  var data = eval("(" + event.data + ")");
+                  console.log("onmessage data:" + JSON.stringify(data));
+                  switch (data.type) {
+                      case 0x01://ping type
+                          pongInvake();
+                          break;
+                      case 0x04://auth message
+                          isAuth = data.body.result;
+                          if (!isAuth) {
+                              layer.msg("认证失败,请进行用户登录", {
+                                  icon: 7,
+                                  time: 5000 //1秒关闭
+                              }, function(){
+                                  location.href = "/user/login";
+                              });
+                          }
+                          break;
+                      case 0x06://broadcast message
+                          broadcastInvake(data.body);
+                          break;
+                      case 0x07://userinfo message
+                          userInfoInvake(data.body);
+                          break;
+                      case 0x08://sys message
+                          layer.msg(data.body.msg,{icon:7});
+                          break;
+                      case 0x09://error message
+                          layer.msg(data.body.msg,{
+                              icon:5,
+                              time:5000
+                          },function () {
+                              location.href = "/index";
+                          });
+                          break;
+                  }
+              };
+              /*WebSocket 关闭*/
+              window.socket.onclose = function (event) {
+                  closeInvake(event);
+              };
 
-            /*WebSocket 开启*/
-            window.socket.onopen = function (event) {
-                openInvake(event);
-            };
-        } else {
-            layer.msg("对比起，您的浏览器不支持WebSocket！！！",{
-                icon:5,
-                time:1000},function () {
-                location.href = "/index";
-            });
-        }
+              /*WebSocket 开启*/
+              window.socket.onopen = function (event) {
+                  console.log("开启websocket....")
+                  openInvake(event);
+              };
+          } else {
+              layer.msg("对比起，您的浏览器不支持WebSocket！！！",{
+                  icon:5,
+                  time:1000},function () {
+                  location.href = "/index";
+              });
+          }
 
-    }
-    //userInfoInvake
-    function userInfoInvake(obj) {
-        var htmlData = ' <li class="fn-clear selected"><em>当前在线人数: '+obj.count+'</em></li>';
-        $.each(obj.userinfo,function (index, content) {
-           htmlData+='<li class="fn-clear"><span><a href="user/home?id='+content.id+'" target="view_window"><img src="'+content.icon+'" width="30" height="30"  alt=""/></a></span><em>'+content.username+'</em><small class="online" title="在线"></small></li>';
-        });
+      }
+      //userInfoInvake
+      function userInfoInvake(obj) {
+          var htmlData = ' <li class="fn-clear selected"><em>当前在线人数: '+obj.count+'</em></li>';
+          $.each(obj.userinfo,function (index, content) {
+              htmlData+='<li class="fn-clear"><span><a href="user/home?id='+content.id+'" target="view_window"><img src="'+content.icon+'" width="30" height="30"  alt=""/></a></span><em>'+content.username+'</em><small class="online" title="在线"></small></li>';
+          });
 
-        $("#userinfo").html(htmlData);
-    }
+          $("#userinfo").html(htmlData);
+      }
 
-    //broadcast
-    function broadcastInvake(obj) {
-                var htmlData = '<div class="msg_item fn-clear">'
-                    + '<div class="uface"><a href="user/home?id='+obj.uid+'" target="view_window"><img src="'+obj.icon+'" width="40" height="40"  alt=""/></a></div>'
-                    + '<div class="item_right">'
-                    + '<div class="msg own">' + obj.msg + '</div>'
-                    + '<div class="name_time">' + obj.name +' · '+ obj.time +'</div>'
-                    + '</div>'
-                    + '</div>';
-                $("#message_box").append(htmlData);
-                $('#message_box').scrollTop($("#message_box")[0].scrollHeight + 20);
-                $("#message").val('');
-    }
+      //broadcast
+      function broadcastInvake(obj) {
+          var htmlData = '<div class="msg_item fn-clear">'
+              + '<div class="uface"><a href="user/home?id='+obj.uid+'" target="view_window"><img src="'+obj.icon+'" width="40" height="40"  alt=""/></a></div>'
+              + '<div class="item_right">'
+              + '<div class="msg own">' + obj.msg + '</div>'
+              + '<div class="name_time">' + obj.name +' · '+ obj.time +'</div>'
+              + '</div>'
+              + '</div>';
+          $("#message_box").append(htmlData);
+          $('#message_box').scrollTop($("#message_box")[0].scrollHeight + 20);
+          $("#message").val('');
+      }
 
-    //Pong
-    function pongInvake() {
-        var msg = buildMessage(pongtype, null, null);
-        sendMessage(msg);
-    }
+      //Pong
+      function pongInvake() {
+          var msg = buildMessage(pongtype, null, null);
+          sendMessage(msg);
+      }
 
-    //构造信息
-    function buildMessage(type, token, msg) {
-        var obj = {};
-        obj.MAGIC = 0xabcd;
-        obj.type = type;
-        obj.token = token;
-        obj.msg = msg;
-        return JSON.stringify(obj);
-    }
+      //构造信息
+      function buildMessage(type, token, msg) {
+          var obj = {};
+          obj.MAGIC = 0xabcd;
+          obj.type = type;
+          obj.token = token;
+          obj.msg = msg;
+          return JSON.stringify(obj);
+      }
 
-    //发送消息
-    function sendMessage(obj) {
-        if (!window.socket) {
-            return;
-        }
-        if (socket.readyState == WebSocket.OPEN || auth) {
-            window.socket.send(obj);
-        } else {
-            layer.msg("连接服务器失败！！！",{
-                icon:5,
-                time:2000},function () {
-                location.href = "/index";
-            });
-        }
-    }
+      //发送消息
+      function sendMessage(obj) {
+          if (!window.socket) {
+              return;
+          }
+          if (socket.readyState == WebSocket.OPEN || isAuth) {
+              window.socket.send(obj);
+          } else {
+              layer.msg("连接服务器失败！！！",{
+                  icon:5,
+                  time:5000},function () {
+                  location.href = "/index";
+              });
+          }
+      }
 
-    //关闭操作
-    function closeInvake(event) {
-        window.socket = null;
-        window.isAuth = false;
-        window.userCount = 0;
-        layer.msg("连接出错，返回首页！！！",{
-            icon:5,
-            time:2000},function () {
-            location.href = "/index";
-        });
-    }
+      //关闭操作
+      function closeInvake(event) {
+          window.socket = null;
+          window.isAuth = false;
+          window.userCount = 0;
+          layer.msg("连接出错，返回首页！！！",{
+              icon:5,
+              time:5000},function () {
+              location.href = "/index";
+          });
+      }
 
-    //开启操作
-    function openInvake(event) {
-        var msg = buildMessage(authtype, getCookie(), null);
-        sendMessage(msg);
-    }
+      //开启操作
+      function openInvake(event) {
+          var msg = buildMessage(authtype, getCookie(), null);
+          sendMessage(msg);
+      }
 
-    layui.use(['layer'], function () {
-        $('#message_box').scrollTop($("#message_box")[0].scrollHeight + 20);
+      layui.use(['layer'], function () {
+          $('#message_box').scrollTop($("#message_box")[0].scrollHeight + 20);
 
-        $('.sub_but').click(function (event) {
-            var text = $("#message").val();
-            var msg = buildMessage(messagetype,null,text);
-            sendMessage(msg);
-        });
+          $('.sub_but').click(function (event) {
+              var text = $("#message").val();
+              var msg = buildMessage(messagetype,null,text);
+              sendMessage(msg);
+          });
 
-        userLogin();
-    });
+          userLogin();
+      });
+
+  })
 </script>
 </body>
 </html>

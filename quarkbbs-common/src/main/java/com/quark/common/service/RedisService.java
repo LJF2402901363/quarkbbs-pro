@@ -1,4 +1,4 @@
-package com.quark.rest.service;
+package com.quark.common.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;

@@ -1,6 +1,7 @@
 /*链接*/
 var quark_login_api = "http://127.0.0.1:8081/user/login";
 var quark_getUser_api = "http://127.0.0.1:8081/user/message/";
+var quark_getUserByToken_api = "http://127.0.0.1:8081/user/";
 var quark_logout_api = "http://127.0.0.1:8081/user/logout";
 var quark_register_api = "http://127.0.0.1:8081/user";
 var quark_upload_api = "http://127.0.0.1:8081/upload/image";

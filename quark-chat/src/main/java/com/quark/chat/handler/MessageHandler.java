@@ -13,32 +13,28 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * @Author : ChinaLHR
- * @Date : Create in 14:48 2017/10/24
- * @Email : 13435500980@163.com
- *
- * 消息处理Handler
+ * @date: 2021/6/9 0009 20:17
+ * @description: 消息处理器
+ * @author  moyisuiying
  */
 @ChannelHandler.Sharable
-//@Scope("prototype")
 @Component
 public  class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>{
     private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
     @Autowired
-    private ChannelManager manager;
+    private ChannelManager channelManager;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame frame) throws Exception {
-        ChatUser chatUser = manager.getChatUser(ctx.channel());
+        ChatUser chatUser = channelManager.getChatUser(ctx.channel());
         if (chatUser!=null&&chatUser.isAuth()){
-            QuarkClientProtocol clientProto = JSON.parseObject(frame.text(), new TypeReference<QuarkClientProtocol>(){});
+            QuarkClientProtocol clientProto = JSON.parseObject(frame.text(), QuarkClientProtocol.class);
             //广播消息
-            manager.broadMessage(QuarkChatProtocol.buildMessageCode(chatUser.getUser(),clientProto.getMsg()));
+            channelManager.broadMessage(QuarkChatProtocol.buildMessageCode(chatUser.getUser(),clientProto.getMsg()));
         }
     }
 
@@ -49,8 +45,8 @@ public  class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFr
      */
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
-        manager.removeChannel(ctx.channel());
-        manager.broadMessage(QuarkChatProtocol.buildSysUserInfo(manager.getUsers()));
+        channelManager.removeChannel(ctx.channel());
+        channelManager.broadMessage(QuarkChatProtocol.buildSysUserInfo(channelManager.getUsers()));
         super.channelUnregistered(ctx);
     }
 
@@ -63,7 +59,7 @@ public  class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFr
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         logger.error("connection error and close the channel:{}",cause);
-        manager.removeChannel(ctx.channel());
-        manager.broadMessage(QuarkChatProtocol.buildSysUserInfo(manager.getUsers()));
+        channelManager.removeChannel(ctx.channel());
+        channelManager.broadMessage(QuarkChatProtocol.buildSysUserInfo(channelManager.getUsers()));
     }
 }

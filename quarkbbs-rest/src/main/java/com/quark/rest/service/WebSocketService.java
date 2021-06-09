@@ -1,6 +1,7 @@
 package com.quark.rest.service;
 
 import com.quark.common.dto.SocketMessage;
+import com.quark.common.service.RedisService;
 import com.quark.rest.controller.WebSocketController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

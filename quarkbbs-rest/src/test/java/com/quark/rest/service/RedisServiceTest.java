@@ -1,6 +1,7 @@
 package com.quark.rest.service;
 
 import com.quark.common.entity.User;
+import com.quark.common.service.RedisService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

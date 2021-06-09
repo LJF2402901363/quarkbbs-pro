@@ -89,7 +89,9 @@ public class ChannelManager {
                 }
             }
 
-        }finally {
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             rwLock.writeLock().unlock();
         }
     }

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.quark.common.dao.UserDao;
 import com.quark.common.entity.User;
 import com.quark.common.exception.ServiceProcessException;
-import com.quark.rest.service.RedisService;
+import com.quark.common.service.RedisService;
 import com.quark.rest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author LHR
@@ -70,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     }
 
     @Override
-    public String LoginUser(User user) {
+    public String loginUser(User user) {
         String token = UUID.randomUUID().toString();
         redisService.setCacheMapValue(REDIS_USER_KEY , token, user);
         redisSocketService.setCacheSet(REDIS_USERID_KEY,user.getId());
@@ -85,10 +82,13 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     }
 
     @Override
-    public void LogoutUser(String token) {
+    public void logoutUser(String token) {
         User user = getUserByToken(token);
-        redisService.deleteCacheMapKey(REDIS_USER_KEY ,token);
-        redisSocketService.deleteFromSet(REDIS_USERID_KEY,user.getId());
+        if (user != null){
+            redisService.deleteCacheMapKey(REDIS_USER_KEY ,token);
+            redisSocketService.deleteFromSet(REDIS_USERID_KEY,user.getId());
+        }
+
 //        loginId.remove(user.getId());//维护一个登录用户的set
     }
 

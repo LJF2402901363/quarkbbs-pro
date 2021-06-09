@@ -10,6 +10,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.ServerEndpoint;
+
 /**
  * @Author LHR
  * Create By 2017/9/6

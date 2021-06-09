@@ -26,7 +26,6 @@ import javax.annotation.PreDestroy;
  * @Version: 1.0
  **/
 @Component
-//@Scope("prototype")
 public class ServerSocketChannelInitializer extends ChannelInitializer<SocketChannel> {
     @Autowired
     private UserAuthHandler authHandler;
@@ -35,14 +34,13 @@ public class ServerSocketChannelInitializer extends ChannelInitializer<SocketCha
     private DefaultEventLoopGroup defaultGroup;
     @PostConstruct
     public void  init(){
-        this.defaultGroup = new DefaultEventLoopGroup(8, new EventLoopExecutorImpl(4,"DEFAULTGROUP"));
+        this.defaultGroup = new DefaultEventLoopGroup(2, new EventLoopExecutorImpl(4,"DEFAULTGROUP"));
     }
 
 
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
-
         pipeline.addLast(
                         defaultGroup,
                         new HttpServerCodec(),//请求解码器

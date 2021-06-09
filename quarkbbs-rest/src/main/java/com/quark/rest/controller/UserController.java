@@ -71,7 +71,7 @@ public class UserController extends BaseController {
                 return QuarkResult.warn("用户邮箱不存在，请重新输入");
             if (!loginUser.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes())))
                 return QuarkResult.warn("用户密码错误，请重新输入");
-            String token = userService.LoginUser(loginUser);
+            String token = userService.loginUser(loginUser);
             return QuarkResult.ok(token);
         });
         return result;
@@ -156,7 +156,7 @@ public class UserController extends BaseController {
     @PostMapping("/logout")
     public QuarkResult logout(String token) {
         QuarkResult result = restProcessor(() -> {
-            userService.LogoutUser(token);
+            userService.logoutUser(token);
             return QuarkResult.ok();
         });
 
@@ -164,17 +164,17 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation("根据用户ID获取用户详情与用户最近发布的十个帖子[主要用于用户主页展示]")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户的id", dataType = "int")
-    })
-    @GetMapping("/detail/{userid}")
-    public QuarkResult getUserById(@PathVariable("userid") Integer userid){
-        QuarkResult result = restProcessor(() -> {
-            User user = userService.getById(userid);
-            if (user == null || userid == null) return QuarkResult.warn("用户不存在");
-            List<Posts> postss = postsService.getPostsByUserId(userid);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("posts",postss);
+            @ApiImplicitParams({
+                    @ApiImplicitParam(name = "id", value = "用户的id", dataType = "int")
+            })
+            @GetMapping("/detail/{userid}")
+            public QuarkResult getUserById(@PathVariable("userid") Integer userid){
+                QuarkResult result = restProcessor(() -> {
+                    User user = userService.getById(userid);
+                    if (user == null || userid == null) return QuarkResult.warn("用户不存在");
+                    List<Posts> postss = postsService.getPostsByUserId(userid);
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("posts",postss);
             map.put("user",user);
             return QuarkResult.ok(map);
         });

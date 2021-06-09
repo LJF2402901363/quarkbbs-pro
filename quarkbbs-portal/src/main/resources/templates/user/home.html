@@ -50,11 +50,11 @@
 <div id="users"></div>
 <div th:include="common/footer::footer"></div>
 <script>
-    var uid = $.getUrlParam('id');
+    var token =  getCookie();
     layui.use(['laytpl'],function () {
         var laytpl = layui.laytpl;
 
-        $.get(quark_user_detail_api+uid,function (data) {
+        $.get(quark_getUserByToken_api+token,function (data) {
             var user = $("#user").html();
             laytpl(user).render(data,function (html) {
                 $("#users").html(html);
