@@ -1,7 +1,6 @@
 package com.quark.chat.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.quark.chat.protocol.QuarkChatProtocol;
 import com.quark.chat.protocol.QuarkClientProtocol;
 import com.quark.chat.service.ChannelManager;
@@ -10,7 +9,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.Headers;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.websocketx.*;
@@ -33,7 +31,7 @@ import static com.quark.chat.protocol.QuarkChatType.*;
  * WebSocket握手/用户认证 Handler
  */
 @ChannelHandler.Sharable
-//@Scope("prototype")
+@Scope("prototype")
 @Component
 public class UserAuthHandler extends SimpleChannelInboundHandler {
 

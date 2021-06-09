@@ -1,6 +1,6 @@
 package com.quark.chat.server;
 
-import com.quark.chat.filter.ServerSocketFilter;
+import com.quark.chat.filter.ServerSocketChannelInitializer;
 import com.quark.chat.serverexcutor.EventLoopExecutorImpl;
 import com.quark.chat.service.ChannelManager;
 import io.netty.bootstrap.ServerBootstrap;
@@ -36,10 +36,6 @@ public class QuarkChatServer implements Server {
     private ChannelFuture future;
     private ServerBootstrap bootstrap;
     private ScheduledExecutorService executorService;
-
-    @Value("${HOST}")
-    private String host;
-
     @Value("${PORT}")
     private int port;
 
@@ -48,7 +44,7 @@ public class QuarkChatServer implements Server {
     @Autowired
     private ChannelManager manager;
     @Autowired
-    private ServerSocketFilter serverSocketFilter;
+    private ServerSocketChannelInitializer serverSocketChannelInitializer;
     @PostConstruct
     @Override
     public void init() {
@@ -74,7 +70,7 @@ public class QuarkChatServer implements Server {
                 .option(ChannelOption.TCP_NODELAY, true)//禁止使用Nagle算法
                 .option(ChannelOption.SO_BACKLOG, 1024)//初始化服务端可连接队列大小
                 .localAddress(new InetSocketAddress(port))
-                .childHandler(serverSocketFilter);
+                .childHandler(serverSocketChannelInitializer);
 
         try{
             future = bootstrap.bind().sync();

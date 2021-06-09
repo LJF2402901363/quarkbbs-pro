@@ -27,7 +27,7 @@ import javax.annotation.PreDestroy;
  **/
 @Component
 //@Scope("prototype")
-public class ServerSocketFilter extends ChannelInitializer<SocketChannel> {
+public class ServerSocketChannelInitializer extends ChannelInitializer<SocketChannel> {
     @Autowired
     private UserAuthHandler authHandler;
     @Autowired
