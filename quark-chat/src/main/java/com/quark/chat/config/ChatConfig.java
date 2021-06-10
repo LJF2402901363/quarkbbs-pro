@@ -11,4 +11,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan(basePackages = {"com.quark.common","com.quark.chat"})
 public class ChatConfig {
+
 }

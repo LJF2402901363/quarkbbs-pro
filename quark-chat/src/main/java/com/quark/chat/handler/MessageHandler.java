@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 @Component
 public  class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>{
     private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
-
     @Autowired
     private ChannelManager channelManager;
 
@@ -32,6 +31,7 @@ public  class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFr
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame frame) throws Exception {
         ChatUser chatUser = channelManager.getChatUser(ctx.channel());
         if (chatUser!=null&&chatUser.isAuth()){
+            //包装数据
             QuarkClientProtocol clientProto = JSON.parseObject(frame.text(), QuarkClientProtocol.class);
             //广播消息
             channelManager.broadMessage(QuarkChatProtocol.buildMessageCode(chatUser.getUser(),clientProto.getMsg()));

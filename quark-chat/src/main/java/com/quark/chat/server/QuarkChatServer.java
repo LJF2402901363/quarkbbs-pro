@@ -61,9 +61,9 @@ public class QuarkChatServer implements Server {
         logger.info("server start");
         bootstrap.group(bossGroup, workGroup)
                 .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.SO_KEEPALIVE, true)//TCP测链路检测
-                .option(ChannelOption.TCP_NODELAY, true)//禁止使用Nagle算法
-                .option(ChannelOption.SO_BACKLOG, 1024)//初始化服务端可连接队列大小
+                .option(ChannelOption.SO_KEEPALIVE, true) //TCP测链路检测
+                .option(ChannelOption.TCP_NODELAY, true) //禁止使用Nagle算法
+                .option(ChannelOption.SO_BACKLOG, 1024)  //初始化服务端可连接队列大小
                 .localAddress(new InetSocketAddress(port))   //设置监听端口
                 .childHandler(serverSocketChannelInitializer); //设置管道初始过滤器
 
